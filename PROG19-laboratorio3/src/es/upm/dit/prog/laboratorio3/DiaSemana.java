@@ -6,7 +6,7 @@ public class DiaSemana {
     	int[] mesRegular = {0,3,3,6,1,4,6,2,5,0,3,5};
     	int[] mesBisiesto = {0,3,4,0,2,5,0,3,6,1,4,6};
     	
-    	if ((a%4 == 0) && ((a%100 != 0) || (a%400 == 0) )) {
+    	if (((a%400 == 0) || (a%4 == 0)) && (a%100 != 0) ) {
     		return mesBisiesto[m-1];
     	}
     	else {
@@ -15,8 +15,8 @@ public class DiaSemana {
     }
     
     public String getDiaSemana (int anno, int mes, int dia) {
-    	String diaSemana[] = {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"};
-		int numeroDia=((anno-1)%7+((anno-1)/4-3*(((anno-1)/100)+1)/4)%7+getM(anno, mes)+dia%7)%7;
+    	String diaSemana[] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
+		int numeroDia=((anno-1)%7+((anno-1)/4-3*(((anno-1)/100)+1)/4)%7+this.getM(anno, mes)+dia%7)%7;
 		return diaSemana[numeroDia];
     }
 }

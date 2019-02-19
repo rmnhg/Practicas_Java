@@ -12,6 +12,10 @@ public class ElementoRadiactivo {
 		return this.l;
 	}
 	
+	public String getNombre() {
+		return this.nombre;
+	}
+	
 	public double getVidaMedia() {
 		return (Math.log(2)/this.l);
 	}
@@ -36,22 +40,7 @@ public class ElementoRadiactivo {
 		return result;
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ElementoRadiactivo other = (ElementoRadiactivo) obj;
-		if (Double.doubleToLongBits(l) != Double.doubleToLongBits(other.l))
-			return false;
-		if (nombre == null) {
-			if (other.nombre != null)
-				return false;
-		} else if (!nombre.equals(other.nombre))
-			return false;
-		return true;
+	public boolean equals(ElementoRadiactivo el) {
+		return (this.getNombre().equals(el.getNombre()) && this.l==el.getL());
 	}
 }
