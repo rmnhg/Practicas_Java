@@ -138,12 +138,12 @@ public class Vehiculo {
 	}
 	
 	public double impacto(Vehiculo v2) {
-		double dx = v2.getPos().getX() - this.getPos().getX();
-		double dy = v2.getPos().getY() - this.getPos().getY();
-		double dvx = this.getVelocidad().getX() - v2.getVelocidad().getX();
-		double dvy = this.getVelocidad().getY() - v2.getVelocidad().getY();
-		double tx = dx/dvx;
-		double ty = dy/dvy;
+		double dx = v2.getPos().getX() - this.getPos().getX(); // (x2 - x1)
+		double dy = v2.getPos().getY() - this.getPos().getY(); // (y2 - y1)
+		double dvx = this.getVelocidad().getX() - v2.getVelocidad().getX(); // (Vx1 - Vx2)
+		double dvy = this.getVelocidad().getY() - v2.getVelocidad().getY(); // (Vy1 - Vy2)
+		double tx = dx/dvx; // (x2 - x1) / (Vx1 - Vx2)
+		double ty = dy/dvy; // (y2 - y1) / (Vy1 - Vy2)
 		Vector dv = new Vector (dvx, dvy);
 		if (this.pos.distancia(v2.getPos()) < MINIMAL_DISTANCE) {
 			return 0.0;
