@@ -56,25 +56,19 @@ public class DetectorVehiculos {
 	 */
 	public void addVehiculo (Vehiculo v) {
 		if(v!=null) {
-			boolean metido = false;
 			for (int i=0; i < this.detectados.length; i++) {
-				if(!metido && this.detectados[i]==null){
+				if(this.detectados[i]==null){
 					this.detectados[i]=v;
-					metido=true;
-					break;
+					return;
 				}
 			}
-			if (!metido) {
-				double t = this.detectados[0].getT();
-				int indice=0;
-				for (int i=0; i < this.detectados.length; i++) {
-					if(this.detectados[i].getT() < t) {
-						t=this.detectados[i].getT();
-						indice=i;
-					}
+			int indice=0;
+			for (int i=0; i < this.detectados.length; i++) {
+				if(this.detectados[i].getT() < this.detectados[indice].getT()) {
+					indice=i;
 				}
-				this.detectados[indice]=v;
 			}
+			this.detectados[indice]=v;
 		}
 	}
 	
@@ -158,8 +152,7 @@ public class DetectorVehiculos {
 			nuevo.mover(pos, t);
 			this.addVehiculo(nuevo);
 		} else {
-			this.addVehiculo(new Vehiculo("AUTO"+this.n, pos, t, pos, t));
-			this.n++;
+			this.addVehiculo(new Vehiculo("AUTO"+this.n++, pos, t, pos, t));
 		}
 	}
 }
