@@ -29,7 +29,7 @@ public class DetectorVehiculos {
 	public String toString() {
 		String str = "DetectorVehiculos [N=" + N + ", v=" + v + ", detectados=\n";
 		for (int i=0; i < this.getDetectados().length; i++) {
-			str+="\t"+i+". "+v+"\n";
+			str+="\t"+i+". "+this.detectados[i]+"\n";
 		}
 		str+=", n=" + n + "]";
 		return str;
