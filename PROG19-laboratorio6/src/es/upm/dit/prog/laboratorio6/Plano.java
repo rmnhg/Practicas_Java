@@ -333,6 +333,65 @@ public class Plano {
 	}
 	
 	/**
+	 * Cuenta el numero de edificios alrededor de un punto del mapa
+	 * @param x fila de la matriz del mapa
+	 * @param y columna de la matriz del mapa
+	 * @return numero de edificios alrededor de un punto del mapa
+	 */
+	private int cuentaEdificiosAlrededor (int x/*fila*/, int y/*columna*/) {
+		int edificios=0;
+		if(x!=alturas.length-1) {
+			//check abajo (excepto ultima fila)
+			if(alturas[x+1][y]!=0) {
+				edificios++;
+			}
+		}
+		if(x!=0) {
+			//check arriba (excepto primera fila)
+			if(alturas[x-1][y]!=0) {
+				edificios++;
+			}
+		}
+		if(y!=alturas[x].length-1) {
+			//check dcha (excepto ultima columna)
+			if(alturas[x][y+1]!=0) {
+				edificios++;
+			}
+		}
+		if(y!=0) {
+			//check izda (excepto primera columna)
+			if(alturas[x][y-1]!=0) {
+				edificios++;
+			}
+		}
+		if(y!=alturas[x].length-1 && x!=0) {
+			//check supdcha (excepto ultima columna y primera fila)
+			if(alturas[x-1][y+1]!=0) {
+				edificios++;
+			}
+		}
+		if(y!=0 && x!=0) {
+			//check supizda (excepto primera columna y primera fila)
+			if(alturas[x-1][y-1]!=0) {
+				edificios++;
+			}
+		}
+		if(y!=alturas[x].length-1 && x!=alturas.length-1) {
+			//check infdcha (excepto ultima columna y ultima fila)
+			if(alturas[x+1][y+1]!=0) {
+				edificios++;
+			}
+		}
+		if(y!=0 && x!=alturas.length-1) {
+			//check infizda (excepto primera columna y ultima fila)
+			if(alturas[x+1][y-1]!=0) {
+				edificios++;
+			}
+		}
+		return edificios;
+	}
+	
+	/**
 	 * Cuenta el numero de edificios existentes en la ciudad que no esten pegados a
 	 * otro edificio.
 	 *
@@ -343,7 +402,9 @@ public class Plano {
 		int n=0;
 		for (int x = 0; x < alturas.length; x++) {
 			for (int y = 0; y < alturas[x].length; y++) {
-				//Pensar bien los ifs
+				if (cuentaEdificiosAlrededor(x, y)==0) {
+					n++;
+				}
 			}
 		}
 		return n;
@@ -367,7 +428,30 @@ public class Plano {
 	 *             fuera de la ciudad.
 	 */
 	public void creaCarretera(int x0, int y0, int x1, int y1) throws Exception {
-		return;
+		if (!this.dentro(x0, y0) && !this.dentro(x1, y1)) {
+			throw new Exception();
+		}
+		double anchura = Math.abs(y0-y1);
+		double altura = Math.abs(x0-x1);
+		//Crear carretera horizontal de y0 a y1 y vertical de x0 a x1
+		if (x0 < x1) {
+			for (int i = y0; i<anchura; i++) {
+				alturas[x0][i]=0;
+			}
+		} else {
+			for (int i = y0; i<anchura; i--) {
+				alturas[x0][i]=0;
+			}
+		}
+		if (x0 < x1) {
+			for (int i = x0; i<altura; i++) {
+				alturas[i][y1]=0;
+			}
+		} else {
+			for (int i = x0; i<altura; i--) {
+				alturas[i][y1]=0;
+			}
+		}
 	}
 
 	/**
