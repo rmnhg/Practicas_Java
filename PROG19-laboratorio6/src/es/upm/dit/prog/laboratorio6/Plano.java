@@ -140,7 +140,7 @@ public class Plano {
 	public boolean dentro(int x, int y) {
 		int xMax = alturas.length;
 		int yMax = alturas[0].length;
-		return (x < xMax) && (y < yMax);
+		return (x>=0 && x < xMax) && (y>=0 && y < yMax);
 	}
 
 	/**
@@ -155,7 +155,10 @@ public class Plano {
 	 *         posicion (x,y) esta situada fuera del plano, devuelve cero.
 	 */
 	public int getAltura(int x, int y) {
-		return alturas[x][y];
+		if (dentro(x,y)) {
+			return alturas[x][y];
+		}
+		return 0;
 	}
 
 	/**
@@ -172,7 +175,7 @@ public class Plano {
 	 *
 	 */
 	public boolean hayEdificio(int x, int y) {
-		return this.dentro(x, y) && (alturas[x][y] > 0);
+		return getAltura(x,y) > 0;
 	}
 
 	/**
@@ -198,6 +201,9 @@ public class Plano {
 		if (!this.dentro(x, y)) {
 			throw new Exception ("Error, el punto ("+x+", "+y+") no esta dentro del mapa.");
 		} else {
+			if(getAltura(x,y)!=0) {
+				destruyeEdificio(x,y);
+			}
 			this.alturas[x][y]=altura;
 		}
 	}
@@ -340,52 +346,14 @@ public class Plano {
 	 */
 	private int cuentaEdificiosAlrededor (int x/*fila*/, int y/*columna*/) {
 		int edificios=0;
-		if(x!=alturas.length-1) {
-			//check abajo (excepto ultima fila)
-			if(alturas[x+1][y]!=0) {
-				edificios++;
-			}
-		}
-		if(x!=0) {
-			//check arriba (excepto primera fila)
-			if(alturas[x-1][y]!=0) {
-				edificios++;
-			}
-		}
-		if(y!=alturas[x].length-1) {
-			//check dcha (excepto ultima columna)
-			if(alturas[x][y+1]!=0) {
-				edificios++;
-			}
-		}
-		if(y!=0) {
-			//check izda (excepto primera columna)
-			if(alturas[x][y-1]!=0) {
-				edificios++;
-			}
-		}
-		if(y!=alturas[x].length-1 && x!=0) {
-			//check supdcha (excepto ultima columna y primera fila)
-			if(alturas[x-1][y+1]!=0) {
-				edificios++;
-			}
-		}
-		if(y!=0 && x!=0) {
-			//check supizda (excepto primera columna y primera fila)
-			if(alturas[x-1][y-1]!=0) {
-				edificios++;
-			}
-		}
-		if(y!=alturas[x].length-1 && x!=alturas.length-1) {
-			//check infdcha (excepto ultima columna y ultima fila)
-			if(alturas[x+1][y+1]!=0) {
-				edificios++;
-			}
-		}
-		if(y!=0 && x!=alturas.length-1) {
-			//check infizda (excepto primera columna y ultima fila)
-			if(alturas[x+1][y-1]!=0) {
-				edificios++;
+		for (int i=x-1; i<=x+1; i++) {
+			for (int j=y-1; j<=y+1; j++) {
+				if(i==x && j==y) {
+					continue;
+				}
+				if(hayEdificio(i, j)){
+					edificios++;
+				}
 			}
 		}
 		return edificios;
@@ -428,27 +396,25 @@ public class Plano {
 	 *             fuera de la ciudad.
 	 */
 	public void creaCarretera(int x0, int y0, int x1, int y1) throws Exception {
-		if (!this.dentro(x0, y0) && !this.dentro(x1, y1)) {
+		if (!this.dentro(x0, y0) || !this.dentro(x1, y1)) {
 			throw new Exception();
 		}
-		double anchura = Math.abs(y0-y1);
-		double altura = Math.abs(x0-x1);
 		//Crear carretera horizontal de y0 a y1 y vertical de x0 a x1
-		if (x0 < x1) {
-			for (int i = y0; i<anchura; i++) {
+		if (y0 < y1) {
+			for (int i = y0; i<=y1; i++) {
 				alturas[x0][i]=0;
 			}
 		} else {
-			for (int i = y0; i<anchura; i--) {
+			for (int i = y0; i>=y1; i--) {
 				alturas[x0][i]=0;
 			}
 		}
 		if (x0 < x1) {
-			for (int i = x0; i<altura; i++) {
+			for (int i = x0; i<=x1; i++) {
 				alturas[i][y1]=0;
 			}
 		} else {
-			for (int i = x0; i<altura; i--) {
+			for (int i = x0; i>=x1; i--) {
 				alturas[i][y1]=0;
 			}
 		}
